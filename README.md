@@ -7,6 +7,7 @@ Através de alguns serviços do "BotFather" é possível em poucas horas criar u
   Para "invocar" o bot, somente é necessário que a pergunta comece com "Oh polvo,"
   
   Exemplos;
+  
     Pergunta: "Oh polvo, devo modificar código legado?"
     Resposta: "Não"
     
