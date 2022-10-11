@@ -48,7 +48,7 @@ def answer(message):
 
 
     if ' ou ' in ms:
-        bot.send_message(message.chat.id, f"Creio que {answer}")
+        bot.send_message(message.chat.id, f"Creio que {answer}!")
     else:
         bot.send_message(message.chat.id, choice(yORn))
 
