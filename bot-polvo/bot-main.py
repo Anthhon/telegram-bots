@@ -8,6 +8,7 @@ Keep your token secure and store it safely, it can be used by anyone to control 
 For a description of the Bot API, see this page: https://core.telegram.org/bots/api
 '''
 
+from dataclasses import replace
 import telebot
 from random import choice
 
@@ -33,12 +34,13 @@ def answer(message):
     
     ms = message.text
     
+    # Check if the questions ends with a '?'
     if ms.endswith('?'):
         cString = ms[10:-1]
     else:
         cString = ms[10:]
 
-
+    # Verbalize the answer depending the question type
     cList = cString.split(' ou ', 2)
     answer = choice(cList)
     yORn = [
@@ -46,11 +48,44 @@ def answer(message):
         "Não"
     ]
 
+    # Possible pronouns
+    singleNouns = [
+        'eu',
+        'Eu',
+        'Minha pessoa',
+        'minha pessoa',
+        'eu próprio',
+        'Eu próprio',
+        'eu mesmo',
+        'Eu mesmo'
+    ]
 
-    if ' ou ' in ms:
-        bot.send_message(message.chat.id, f"Creio que {answer}!")
+    complexNouns = [
+        'Eu sou',
+        'eu sou',
+        'serei eu',
+        'Serei eu',
+    ]
+
+    # AVCS -> Anti Verbal Confusion System
+    
+    for noun in complexNouns:
+        if noun in answer:
+            answer = answer.replace(noun, 'você é')
+    
+    for noun in singleNouns:
+        if noun in answer:
+            answer = answer.replace(noun, 'você')
+
+
+
+    if len(ms) < 10:
+        bot.reply_to(message, "Diga criatura ignorante")
+        return
+    elif ' ou ' in ms:
+        bot.reply_to(message, f"Creio que {answer}!")
     else:
-        bot.send_message(message.chat.id, choice(yORn))
+        bot.reply_to(message, choice(yORn))
 
     # Cita a mensagem e responde com a frase parametrada
     # bot.send_message(message.chat.id, f"Qual a sua dúvida, {message.from_user.first_name}?")
