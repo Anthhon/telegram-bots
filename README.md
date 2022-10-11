@@ -1,5 +1,4 @@
-# telegram-bots é um projeto de criação de bots para o Telegram
-# que utilizam a API própria do Telegram
+# telegram-bots é um projeto de criação de bots para o Telegram que utilizam a API própria do Telegram
 
 Através de alguns serviços do "BotFather" é possível em poucas horas criar um bot funcional capaz de responder mensagens pelo Telegram
 
