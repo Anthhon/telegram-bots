@@ -33,12 +33,13 @@ def answer(message):
     
     ms = message.text
     
+    # Check if the questions ends with a '?'
     if ms.endswith('?'):
         cString = ms[10:-1]
     else:
         cString = ms[10:]
 
-
+    # Verbalize the answer depending the question type
     cList = cString.split(' ou ', 2)
     answer = choice(cList)
     yORn = [
@@ -46,11 +47,69 @@ def answer(message):
         "Não"
     ]
 
+    # Possible pronouns
+    singleNouns = [
+        'eu',
+        'Eu',
+        'Minha pessoa',
+        'minha pessoa',
+        'eu próprio',
+        'Eu próprio',
+        'eu mesmo',
+        'Eu mesmo'
+    ]
 
-    if ' ou ' in ms:
-        bot.send_message(message.chat.id, f"Creio que {answer}!")
+    complexNouns = [
+        'Eu sou',
+        'eu sou',
+        'sou',
+        'Sou',
+        'serei eu',
+        'Serei eu',
+    ]
+
+    ownNouns = [
+        'Você é',
+        'Você e',
+        'Voce e',
+        'Você e',
+        'você é',
+        'voce é',
+        'você e',
+        'voce e',
+        'voce',
+        'você'
+    ]
+
+    if len(ms) < 10:
+        bot.reply_to(message, "Diga criatura ignorante")
+        return
+    elif ' ou ' in ms:
+
+        # Função que responde a mensagem
+        def return_message(answer):
+            bot.reply_to(message, f"Creio que {answer}!")
+        
+        # AVCS -> Anti Verbal Confusion System
+        for noun in complexNouns:
+            if noun in answer:
+                answer = answer.replace(noun, 'você é')
+                return_message(answer)
+                return
+        for noun in singleNouns:
+            if noun in answer:
+                answer = answer.replace(noun, 'você')
+                return_message(answer)
+                return
+        for noun in ownNouns:
+            if noun in answer:
+                answer = answer.replace(noun, 'eu sou')
+                return_message(answer)
+                return
+        bot.reply_to(message, f"Creio que {answer}!")
+
     else:
-        bot.send_message(message.chat.id, choice(yORn))
+        bot.reply_to(message, choice(yORn))
 
     # Cita a mensagem e responde com a frase parametrada
     # bot.send_message(message.chat.id, f"Qual a sua dúvida, {message.from_user.first_name}?")
