@@ -8,7 +8,6 @@ Keep your token secure and store it safely, it can be used by anyone to control 
 For a description of the Bot API, see this page: https://core.telegram.org/bots/api
 '''
 
-from dataclasses import replace
 import telebot
 from random import choice
 
@@ -63,27 +62,52 @@ def answer(message):
     complexNouns = [
         'Eu sou',
         'eu sou',
+        'sou',
+        'Sou',
         'serei eu',
         'Serei eu',
     ]
 
-    # AVCS -> Anti Verbal Confusion System
-    
-    for noun in complexNouns:
-        if noun in answer:
-            answer = answer.replace(noun, 'você é')
-    
-    for noun in singleNouns:
-        if noun in answer:
-            answer = answer.replace(noun, 'você')
-
-
+    ownNouns = [
+        'Você é',
+        'Você e',
+        'Voce e',
+        'Você e',
+        'você é',
+        'voce é',
+        'você e',
+        'voce e',
+        'voce',
+        'você'
+    ]
 
     if len(ms) < 10:
         bot.reply_to(message, "Diga criatura ignorante")
         return
     elif ' ou ' in ms:
+
+        # Função que responde a mensagem
+        def return_message(answer):
+            bot.reply_to(message, f"Creio que {answer}!")
+        
+        # AVCS -> Anti Verbal Confusion System
+        for noun in complexNouns:
+            if noun in answer:
+                answer = answer.replace(noun, 'você é')
+                return_message(answer)
+                return
+        for noun in singleNouns:
+            if noun in answer:
+                answer = answer.replace(noun, 'você')
+                return_message(answer)
+                return
+        for noun in ownNouns:
+            if noun in answer:
+                answer = answer.replace(noun, 'eu sou')
+                return_message(answer)
+                return
         bot.reply_to(message, f"Creio que {answer}!")
+
     else:
         bot.reply_to(message, choice(yORn))
 
