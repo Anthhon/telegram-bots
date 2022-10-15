@@ -8,25 +8,148 @@ Keep your token secure and store it safely, it can be used by anyone to control 
 For a description of the Bot API, see this page: https://core.telegram.org/bots/api
 '''
 
+import os
 import telebot
-from forex_python.converter import CurrencyRates
-from random import choice
+import youtube_dl
+from dotenv import load_dotenv
+from os.path import join, dirname
+from random import choice, randint
 from datetime import date, datetime
-
+from youtubesearchpython import VideosSearch
+from forex_python.converter import CurrencyRates
 
 
 # integração do BOT
-CHAVE_API = "5611954668:AAFjmYBLqh8figyRN-uJ0lfANbYf14son0I"
+CHAVE_API = "5611954668:AAHY-eyE_ckQMNggNR62Rg5DOSduqNloa1o"
 bot = telebot.TeleBot(CHAVE_API)
 
 
 
 # Comandos
 
+# Musica
+
+# @bot.message_handler (commands=['Musica'])
+# def musicDownloader(message):
+    
+#     # Define variáveis de ambiente
+#     dotenv_path = join(dirname(__file__), '.env')
+#     load_dotenv(dotenv_path)
+
+#     chat_id = message.chat.id
+#     user_input = message.text
+#     message_id = message.message_id
+
+#     def search_music(msg):
+#         return VideosSearch(msg, limit = 1).result()
+
+#     def get_duration(result):
+#         result = result['result'][0]['duration'].split(':')
+#         min_duration = int(result[0])
+#         split_count = len(result)
+
+#         return min_duration, split_count
+
+#     def download_music(file_name, link):
+#         ydl_opts = {
+#             'outtmpl': './'+file_name,
+#             'format': 'bestaudio/best',
+#             'postprocessors': [{
+#                 'key': 'FFmpegExtractAudio',
+#                 'preferredcodec': 'mp3',
+#                 'preferredquality': '256',
+#             }],
+#             'prefer_ffmpeg': True
+#         }
+
+#         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+#             info_dict = ydl.extract_info(link, download=True)
+
+#         pass
+
+#     def get_title(result):
+#         return result['result'][0]['duration'].split(':')
+
+#     def get_link(result):
+#         return result['result'][0]['link']
+
+#     def send_audio(file_name):
+#         bot.send_audio(chat_id,audio=open(file_name,'rb'), reply_to_message_id=message_id)
+
+#     def process_request(msg):
+
+#         result = search_music(msg[6:])
+#         min_duration, split_count = get_duration(result)
+
+#         if int(min_duration) < 30 and split_count < 3:
+#             file_name = f"{get_title(result)} - {str(randint(0, 999999))}.mp3"
+#             file_name = file_name.replace('"', '')
+
+#             bot.send_message(message.chat.id, f'''
+# 🎵 {get_title(result)}
+# 🔗 {get_link(result)}
+#             ''')
+
+#             downloading_message = bot.send_message(message.chat.id, '''
+# Baixando a música, só esperar agora 😎
+#             ''')
+
+#             download_music(file_name, get_link(result))
+
+#             try:
+#                 send_audio(file_name)
+#                 bot.send_message(message.chat.id, "Taí meu patrão 🍷")
+#                 print('Música enviada com sucesso!')
+#             except:
+#                 print('Música enviada com sucesso!')
+
+#             os.remove(file_name)
+#         pass
+
+#     def check_input(msg):
+
+#         if msg == '/Musica':
+#             # Envia mensagem explicando comandos
+#             bot.reply_to(message, script_lines['start'])
+#         elif (msg.startswith('/Musica') and msg[6:]!=''):
+#             if 'open.spotify.com' in msg:
+#                 # Exibir mensagem de erro caso tentem baixar músicas do Spotify
+#                 bot.reply_to(message, script_lines['spotify_input_error'])
+#             else:
+#                 # Processar Comandos
+#                 process_request(msg)
+#         else:
+#             bot.reply_to(message, script_lines['invalid_command'])
+        
+#         pass
+
+
+#     # Dicionário de mensagens padrão a serem enviadas
+#     script_lines = {
+#         'start':'''
+# Eae man, se quiser uma música é só me enviar o seguinte:
+# "/Musica nome da musica"
+#         ''',
+#         'spotify_input_error':'''
+# Opa, eu não consigo baixar músicas do Spotify :/
+# Mas se quiser tentar alguma do Youtube é só enviar!!!
+#         ''',
+#         'invalid_command':'''
+# Digitou alguma coisa errada aí brother!
+# O comando certo é assim "/Music nome da musica"
+#         ''',
+#         'too_long':'''
+# Vídeo muito grande! Vai dá não, irmão :P
+# Tenta um vídeo menor aí
+#         '''
+#     }
+
+#     check_input(user_input)
+
 # Jogo
 
 @bot.message_handler (commands=['Conselho'])
-def twenty_dice(message):
+def advice(message):
 
     phrases = [
         "Com calma e com jeito se come o cu de qualquer sujeito",
@@ -84,7 +207,7 @@ def twenty_dice(message):
 # Cotações de moedas
 
 @bot.message_handler (commands=['Moeda'])
-def twenty_dice(message):
+def currency(message):
 
     c = CurrencyRates()
     dollar_currency = c.get_rates('USD')
@@ -108,7 +231,7 @@ A Libra está valendo {gbp} reais
 # Jogo
 
 @bot.message_handler (commands=['Jogo'])
-def twenty_dice(message):
+def gamesRoullete(message):
 
     games = [
         'Minecraft',
@@ -121,7 +244,8 @@ def twenty_dice(message):
         'Rocketzin',
         'Habbo',
         'Gartic',
-        'Brawhalla'
+        'Brawhalla',
+        'OSU'
     ]
 
     result = choice(games)
@@ -131,7 +255,7 @@ def twenty_dice(message):
 # Apocalipse
 
 @bot.message_handler (commands=['Apocalipse'])
-def temcabare(message):
+def armageddon(message):
     # Faz a contagem de dias restantes até a data destinada
     today = date.today()
     finalday = date(2024, 1, 1) # Dia do segundo turno
@@ -145,7 +269,7 @@ def temcabare(message):
 # Eleições contagem
 
 @bot.message_handler (commands=['Eleicao'])
-def temcabare(message):
+def eleicao(message):
     # Faz a contagem de dias restantes até a data destinada
     today = date.today()
     finalday = date(2022, 10, 30) # Dia do segundo turno
@@ -277,7 +401,6 @@ def firstcallback(message):
     bot.reply_to(message, '''
 Diga lá meu Patrão, o que vai querer?
 /Dado - Jogar dado de 6 - 20 lados
-/Clima - Previsão do tempo para a semana
 /Moeda - Envia a última cotação do dólar e do euro
 /Jogo - Escolhe um jogo em uma lista pré definida
 /Cabare - Responde se tem ou não tem cabaré essa noite

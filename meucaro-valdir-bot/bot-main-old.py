@@ -16,7 +16,7 @@ from datetime import date, datetime
 
 
 # integração do BOT
-CHAVE_API = "5611954668:AAFyf5MpfzTajjbCXkya16c-lhRqURRxKzs"
+CHAVE_API = "5611954668:AAFjmYBLqh8figyRN-uJ0lfANbYf14son0I"
 bot = telebot.TeleBot(CHAVE_API)
 
 
@@ -26,7 +26,7 @@ bot = telebot.TeleBot(CHAVE_API)
 # Jogo
 
 @bot.message_handler (commands=['Conselho'])
-def twenty_dice(message):
+def advice(message):
 
     phrases = [
         "Com calma e com jeito se come o cu de qualquer sujeito",
@@ -74,9 +74,7 @@ def twenty_dice(message):
         "O prazer não é um mal em si; mas certos prazeres trazem mais dor do que felicidade",
         "O prazer de fazer o bem, é maior do que recebê-lo",
         "Aquele que melhor goza a riqueza é aquele que menos necessidade dela tem",
-        "O começo é a metade do todo",
-        "Sem conselhos pra você por hoje",
-        "Eu sei uma boa, mas só posso contar pra curioso, tu és curioso?"
+        "O começo é a metade do todo"
     ]
 
     result = choice(phrases)
@@ -86,7 +84,7 @@ def twenty_dice(message):
 # Cotações de moedas
 
 @bot.message_handler (commands=['Moeda'])
-def twenty_dice(message):
+def currency(message):
 
     c = CurrencyRates()
     dollar_currency = c.get_rates('USD')
@@ -110,7 +108,7 @@ A Libra está valendo {gbp} reais
 # Jogo
 
 @bot.message_handler (commands=['Jogo'])
-def twenty_dice(message):
+def gamesRoullete(message):
 
     games = [
         'Minecraft',
@@ -123,7 +121,8 @@ def twenty_dice(message):
         'Rocketzin',
         'Habbo',
         'Gartic',
-        'Brawhalla'
+        'Brawhalla',
+        'OSU'
     ]
 
     result = choice(games)
@@ -133,7 +132,7 @@ def twenty_dice(message):
 # Apocalipse
 
 @bot.message_handler (commands=['Apocalipse'])
-def temcabare(message):
+def armageddon(message):
     # Faz a contagem de dias restantes até a data destinada
     today = date.today()
     finalday = date(2024, 1, 1) # Dia do segundo turno
@@ -147,7 +146,7 @@ def temcabare(message):
 # Eleições contagem
 
 @bot.message_handler (commands=['Eleicao'])
-def temcabare(message):
+def eleicao(message):
     # Faz a contagem de dias restantes até a data destinada
     today = date.today()
     finalday = date(2022, 10, 30) # Dia do segundo turno
@@ -279,7 +278,6 @@ def firstcallback(message):
     bot.reply_to(message, '''
 Diga lá meu Patrão, o que vai querer?
 /Dado - Jogar dado de 6 - 20 lados
-/Clima - Previsão do tempo para a semana
 /Moeda - Envia a última cotação do dólar e do euro
 /Jogo - Escolhe um jogo em uma lista pré definida
 /Cabare - Responde se tem ou não tem cabaré essa noite
